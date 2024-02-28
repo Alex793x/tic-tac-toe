@@ -62,7 +62,7 @@ export const TicTacToePage: NextPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-12 font-serif">Kryds og Bolle</h1>
+      <h1 className="text-4xl font-bold mb-12 font-serif">Fire På Stribe!</h1>
 
       <div className="grid grid-row-3 gap-4">
         {board.map((row, rowIndex) => (
