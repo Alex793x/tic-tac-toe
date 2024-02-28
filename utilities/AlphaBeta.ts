@@ -34,7 +34,7 @@ function minimaxWithAlphaBeta(board: Board, depth: number, isMaximizingPlayer: b
 }
 
 
-export function computersMove(board: Board, depth: number = 4): Move {
+export function computersMove(board: Board, depth: number = 5): Move {
     let bestScore = -Infinity;
     let bestMove: Move | null = null;
 
