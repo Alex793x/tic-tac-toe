@@ -5,9 +5,7 @@ function checkDirection(board: Board, row: number, col: number, dirRow: number, 
     const nextRow = row + dirRow;
     const nextCol = col + dirCol;
   
-    // Base case for success
     if (count === 4) {
-        console.log("We have a winner!!!!")
       return true;
     }
   
@@ -36,3 +34,8 @@ function checkDirection(board: Board, row: number, col: number, dirRow: number, 
     // Iterate over all directions, check if four in a row exists
     return directions.some(([dirRow, dirCol]) => checkDirection(board, row, col, dirRow, dirCol, symbol));
   }
+
+
+  export function isBoardFull(board: Board): boolean {
+    return board.every(row => row.every(cell => cell !== ' '));
+}

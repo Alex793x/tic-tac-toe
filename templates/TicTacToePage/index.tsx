@@ -4,6 +4,9 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import { Board } from '@/types/Board';
 import { hasFourInARow } from '@/utilities/TicTacToeEngine';
+import { computersMove } from '@/utilities/AlphaBeta';
+import { Cell } from '@/types/Cell';
+
 
 export const TicTacToePage: NextPage = () => {
   const [board, setBoard] = useState<Board>([
@@ -39,24 +42,40 @@ export const TicTacToePage: NextPage = () => {
       [' ', ' ', ' ', ' ', ' ', ' ', ' '],
       [' ', ' ', ' ', ' ', ' ', ' ', ' '],
     ]);
-    setIsXTurn(true); // Optionally reset who starts the next game
+    setIsXTurn(true);
+  };
+
+  useEffect(() => {
+
+    if (!isXTurn && !gameWon) {
+      // Artificial delay to simulate the computer "thinking"
+      const delay = 600; // Delay in milliseconds (e.g., 1000ms = 1 second)
+      setTimeout(() => {
+        const computerMove = computersMove(board);
+        if (computerMove) {
+          makeMoveAndUpdateBoard(computerMove, 'O'); // 'O' represents the computer's move
+        }
+      }, delay);
+    }
+  }, [isXTurn, board, gameWon]);
+
+  const makeMoveAndUpdateBoard = (move: {row: number, col: number}, player: Cell) => {
+    const newBoard = [...board];
+    if (newBoard[move.row][move.col] === ' ') {
+      newBoard[move.row][move.col] = player;
+      setBoard(newBoard);
+
+      if (hasFourInARow(newBoard, move.row, move.col, player)) {
+        setGameWon(true);
+      } else {
+        setIsXTurn(!isXTurn); // Switch turns
+      }
+    }
   };
 
   const handleClick = (row: number, col: number) => {
-    if (board[row][col] === ' ' && !gameWon) {
-      const newBoard = [...board];
-      newBoard[row][col] = isXTurn ? 'X' : 'O';
-
-      setBoard(newBoard);
-      setIsXTurn(!isXTurn);
-
-      // Check for a winner after the move
-      if (hasFourInARow(newBoard, row, col, newBoard[row][col])) {
-        setGameWon(true); // Signal that the game has been won
-
-      }
-    } else {
-      console.log('Cell is already taken');
+    if (board[row][col] === ' ' && !gameWon && isXTurn) {
+      makeMoveAndUpdateBoard({row, col}, 'X');
     }
   };
 
